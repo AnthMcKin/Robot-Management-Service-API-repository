@@ -1,0 +1,205 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Robot Status API",
+    "description": "API для получения статуса роботов по линиям",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "сервер в разработке..."
+    }
+  ],
+  "paths": {
+    "/robot_status": {
+      "get": {
+        "summary": "Получить статус роботов",
+        "description": "Возвращает информацию о статусе линий и роботов",
+        "operationId": "getRobotStatus",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json; charset=utf-8"
+              ]
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json; charset=utf-8"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ",
+            "headers": {
+              "Content-Type": {
+                "description": "Тип содержимого ответа",
+                "schema": {
+                  "type": "string",
+                  "enum": [
+                    "application/json; charset=utf-8"
+                  ]
+                }
+              }
+            },
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/RobotStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный запрос",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ресурс не найден",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "code": 404,
+                  "message": "Запрашиваемый ресурс не найден"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера",
+            "content": {
+              "application/json; charset=utf-8": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RobotStatusResponse": {
+        "type": "object",
+        "required": [
+          "message_id",
+          "date",
+          "data"
+        ],
+        "properties": {
+          "message_id": {
+            "type": "integer",
+            "description": "Идентификатор сообщения",
+            "minimum": 1,
+            "example": 1001
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Дата и время сообщения с часовым поясом",
+            "example": "2025-03-20T14:35:22.123+03:00"
+          },
+          "data": {
+            "type": "array",
+            "description": "Массив данных по линиям",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "$ref": "#/components/schemas/LineData"
+            }
+          }
+        }
+      },
+      "LineData": {
+        "type": "object",
+        "required": [
+          "line_id",
+          "line_status_code",
+          "robots_data"
+        ],
+        "properties": {
+          "line_id": {
+            "type": "integer",
+            "description": "Идентификатор линии",
+            "minimum": 1,
+            "example": 5
+          },
+          "line_status_code": {
+            "type": "integer",
+            "description": "Код статуса линии",
+            "minimum": 1,
+            "example": 3
+          },
+          "robots_data": {
+            "type": "array",
+            "description": "Данные по роботам (может быть null)",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/RobotData"
+            }
+          }
+        }
+      },
+      "RobotData": {
+        "type": "object",
+        "required": [
+          "robot_id",
+          "robot_status_code"
+        ],
+        "properties": {
+          "robot_id": {
+            "type": "integer",
+            "description": "Идентификатор робота",
+            "minimum": 1,
+            "example": 101
+          },
+          "robot_status_code": {
+            "type": "integer",
+            "description": "Код статуса робота",
+            "minimum": 1,
+            "example": 1
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Код ошибки",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "Сообщение об ошибке",
+            "example": "Описание ошибки"
+          }
+        }
+      }
+    }
+  }
+}
