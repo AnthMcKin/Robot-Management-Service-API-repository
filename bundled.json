@@ -14,6 +14,7 @@
   "paths": {
     "/robot_status": {
       "get": {
+		"tags": "status",
         "summary": "Получить статус роботов",
         "description": "Возвращает информацию о статусе линий и роботов",
         "operationId": "getRobotStatus",
