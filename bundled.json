@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "https://robot-status-mock-server.onrender.com",
-      "description": "сервер в разработке..."
+      "description": "Mock-server on Render"
     }
   ],
   "paths": {
